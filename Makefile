@@ -1,4 +1,4 @@
-VERSION = 5.5.1
+VERSION = 5.5.3
 REL = $(VERSION)-1
 THREADS = $(shell nproc)
 PRIORITY = 0
