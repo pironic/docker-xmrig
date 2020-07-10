@@ -2,7 +2,7 @@ FROM alpine
 
 LABEL maintainer="Patrice Ferlet <metal3d@gmail.com>"
 
-ARG VERSION=6.2.2
+ARG VERSION=6.2.3
     
 RUN set -xe;\
     echo "@testing http://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories; \
