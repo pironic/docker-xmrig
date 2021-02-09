@@ -2,25 +2,24 @@ FROM alpine
 
 LABEL maintainer="Patrice Ferlet <metal3d@gmail.com>"
 
-ARG VERSION=6.3.5
+ARG VERSION=6.8.1
     
-RUN set -xe;\
-    echo "@testing http://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories; \
+RUN set -xe; \
     apk update; \
-    apk add util-linux build-base cmake libuv-static libuv-dev openssl-dev hwloc-dev@testing; \
-    wget https://github.com/xmrig/xmrig/archive/v${VERSION}.tar.gz; \
-    tar xf v${VERSION}.tar.gz; \
-    mkdir -p xmrig-${VERSION}/build; \
-    cd xmrig-${VERSION}/build; \
-    cmake .. -DCMAKE_BUILD_TYPE=Release -DUV_LIBRARY=/usr/lib/libuv.a;\
-    make -j $(nproc); \
+    apk add git make cmake libstdc++ gcc g++ automake libtool autoconf linux-headers; \
+    git clone https://github.com/xmrig/xmrig.git; \
+    mkdir xmrig/build; \
+    cd xmrig/scripts && ./build_deps.sh && cd ../build; \
+    cmake .. -DXMRIG_DEPS=scripts/deps -DBUILD_STATIC=ON; \
+    make -j$(nproc); \
     cp xmrig /usr/local/bin/xmrig;\
     rm -rf xmrig* *.tar.gz; \
     apk del build-base; \
-    apk del openssl-dev;\ 
-    apk del hwloc-dev; \
     apk del cmake; \
-    apk add hwloc@testing;
+    apk del automake; \
+    apk del libtool; \
+    apk del autoconf; \ 
+    apk del linux-headers;
 
 ENV POOL_USER="44vjAVKLTFc7jxTv5ij1ifCv2YCFe3bpTgcRyR6uKg84iyFhrCesstmWNUppRCrxCsMorTP8QKxMrD3QfgQ41zsqMgPaXY5" \
     POOL_PASS="" \
